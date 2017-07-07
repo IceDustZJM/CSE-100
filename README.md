@@ -1,2 +1,2 @@
 # CSE-100
-Test
+Implementing trie and BST. 
