@@ -1,0 +1,81 @@
+1. BSTNodeInt.o, BSTInt.o, and testBST.o are first created when "make BST" is typed.
+
+2.  BSTInt.cpp:25:8: error: 'root' was not declared in this scope
+    if (!root) {
+        ^
+    BSTInt.cpp:27:7: error: 'isize' was not declared in this scope
+        ++isize;
+          ^
+    BSTInt.cpp:31:22: error: 'root' was not declared in this scope
+       BSTNodeInt* curr = root;
+                      ^
+    BSTInt.cpp:56:5: error: 'isize' was not declared in this scope
+       ++isize;
+        ^
+    make: *** [BSTInt.o] Error 1
+
+    The double colon is called the scope-resolution operator. Since the use of that
+    is to tell the compiler to look in the global namespace for the type, without 
+    it there is no context for which the function is defined in. With the double
+    semicolon, it tells the compiler that the method insert is of the class of 
+    BSTInt. 
+
+3. The bug was in the insert method. In the while loop of the insert method, 
+   the condition for the loop is incorrect. Initially, the loop stops as soon 
+   as one of the children is NULL. However, we could still traverse downward
+   if one of the child is NULL, mainly because the newly inserted element
+   could still be the child of that child. When not fixed, the loop would 
+   only traverse to a point where the current root is not the correct parent 
+   of the new node, causing the element to not be able to insert. 
+
+4. I first discovered that when I added additional elements into the list of 
+   vectors to insert, the method find was unable to get the element 100. My 
+   first instinct was to look at the method insert. However, when I ran through
+   the code on paper, the method seemed correct, and so the only method left
+   to check was insert. In insert, I discovered that the NULL check of the 
+   method is correct, so I skipped to the second part, namely the while loop. 
+   In here, the traversal does not seem to correspond to my understanding of
+   a BST. This is because, a BST should still be allow to traverse downward
+   even if the current node only has a single child node. I first changed the 
+   loop condition to or, but discovered that a seg fault occured. To fix the 
+   seg fault, I added the if check in each individual if statement body. 
+   Fortunately, that was able to fix the bug. 
+
+5. The insert method in BST.hpp uses a pass by reference while the insert 
+   method in BSTInt.h uses a pass by value. The reason why pass by 
+   reference is used in the template version of the BST is that pass by 
+   reference enables us to insert items without having to actually create 
+   another additional method purely for insert. Instead, the reference is
+   pass into the function and we can add and manipulate the item however we
+   want. This is also very space efficient, as we are only working with one
+   object. Also. since the templated version could accept parameters that are 
+   non-primitive types, as such these objects often have large size, so instead
+   of instantiating the actual object then passing it into the function, we can
+   simply pass in the reference. On the other hand, the insert method in BSTInt
+   could directly use a pass by value because ints are small and we just simply
+   want to pass the int to insert then add it in. In this case, pass by value is
+   much more desirable. 
+
+6. Using the two text files given (actors.txt and actors_sorted.txt), the file
+   with the sorted names has the taller tree, while the random one has a 
+   smaller tree. The text file with the sorted names has height 11793, while
+   the text file with randomized names has height 32. 
+
+7. Height by definition is the number of edges of a tree's longest path from a
+   root to the leaf. I've discovered that the height of a tree whose inputted 
+   content are sorted, the height of the tree will be N-1. This is because BST
+   has structure where all elements larger than the root goes to the right side
+   and all the elements smaller than the root goes to the left side. As such, 
+   the tree whose inputted contents would just be a long linked-list like 
+   structure branching to the right side, this is becase each succeding element
+   in the file is bigger than the previous one. the first element (the root),
+   will be the smallest element, while each element after the root will just 
+   simply append onto the root. This observation also corresponds to the case
+   where the initial actors_sorted.txt is inputted into the program. In that 
+   case, 11794 elements were inputted, and the height of the tree was 11793. 
+   On other hand, the tree whose contents elements are randomized prior to 
+   insertion has much smaller height. As tested with ten random actors name,
+   the tree height was 4, as oppose to when the input was sorted, which
+   had height of 9.  Similarily, the tree with 11794 objects, the height
+   was also much smaller with 32. As oppose to height of 11793.    
+   These findings correponds to my initial observations. 
