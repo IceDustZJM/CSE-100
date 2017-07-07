@@ -1,0 +1,64 @@
+/*
+Author: Hwa Chien Hong
+Date: 6/2/17
+Description: the file that decribes my thought process for solving the
+next best friend to add problem.
+ */
+
+[THE PROBLEM SOLVED]
+- The data set that I chose to explore was the SocialNetwork set given. I chose
+to use the facebook data set more specifically. Using this data set, I 
+attempt to solve the next friend to add problem. Given a user n, I will find
+the next k best friends this user n should add using the information of the
+current friends list. 
+
+[HOW THIS PROBLEM IS SOLVED]
+- I defined the next best person to add based on the current friends list this
+person n has. To solve the problem, I traverse the all the edges of this 
+current user's friends. i.e if user a has friends b, c, and d, I would go
+through all the connecting edges to the friends b, c, and d. By going through
+the friends list of these people, I keep a counter of the duplicate friend
+all these friends have. The duplicate friend that has the most count among
+all duplicate friends then becomes the next person most likely be added by
+person a. This is the case because in a social group, most friends more or
+less have friends who are similar. By this logic, we can find the duplicate
+friends between all of the friends of a who are not already added as friends.
+
+[HOW THIS IS TESTED]
+- to test, I first created a small list of 15 people. In this list I have one
+friend who is friends with all of a's friend but not a. After running the
+program, this one friend should come up as the sugguested next best friend
+to be added. After running the program, I discovered the program also 
+suggested some friends who are duplicate amonng the friend group, to 
+limit the number of results shown and avoid over counting the duplicate 
+friend, I also have a parameter called numOfNextFriends that limits the
+number of friends show up to a certain value limited by the user. After
+running the small list of 15 people, I scaled upward to more people with 
+more duplicates among the friend groups 
+
+[HOW TO RUN]
+- To run, first compile the program by typing 
+
+	make extension 
+
+once this is done, the executable would be generated. 
+This program accepts four parameters 
+1. the data set to be read by the program 
+2. the ID of the user who we want to find the next possible friends to add.
+Since the data set contains only user IDs from 0 ~ 999, you must 
+enter a number that goes from 0 to 999, 
+or we could also enter a larger number, depending how many users are being
+read in
+3. the numNextFriend, which is the top n choices to be found for this user
+4. the output file where the result would be written to 
+
+	./extension facebook_1000.txt [0~999] 10 output
+
+[EXAMPLE OUTPUT] 
+	./extension facebook_1000.txt 11 5 output
+	
+	Suggestion 1 is friend with ID 237
+	Suggestion 2 is friend with ID 323
+	Suggestion 3 is friend with ID 705
+	Suggestion 4 is friend with ID 534
+	Suggestion 5 is friend with ID 437
